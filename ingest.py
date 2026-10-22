@@ -1,6 +1,5 @@
-import nfl_data_py as nfl
+import nflreadpy as nfl
 import sqlite3
-import os
 
 def main():
     # 1. Define the years you want to analyze
@@ -9,8 +8,8 @@ def main():
     print(f"Fetching data for seasons: {years}...")
     
     # 2. Pull the play-by-play data
-    # Note: cache=True helps speed this up if you run it multiple times
-    pbp_data = nfl.import_pbp_data(years, cache=False)
+    # nflreadpy returns a Polars DataFrame, so convert it to pandas for to_sql
+    pbp_data = nfl.load_pbp(years).to_pandas()
     
     # 3. Connect to a local SQLite database
     # This will create 'nfl_data.db' in your project folder automatically
