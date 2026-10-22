@@ -12,6 +12,8 @@ Using play-by-play data, this project evaluates the Colts' early-down (1st and 2
 | Late | 9–13 | Daniel Jones |
 | Post-injury | 14–18 | Riley Leonard / Philip Rivers |
 
+A final section widens the view to every down, to check whether the full offense tells the same story.
+
 Efficiency is measured with **Expected Points Added (EPA)** and **success rate**. Each opponent is rated by the EPA its defense allowed to the rest of the league, which shows both how tough the schedule was and how the Colts performed relative to what each defense usually gave up.
 
 ## Key Questions
@@ -21,6 +23,7 @@ Efficiency is measured with **Expected Points Added (EPA)** and **success rate**
 - How much of the decline survives after adjusting for opponent strength?
 - How much of the collapse lines up with the QB injury instead of the schedule?
 - In Weeks 9–13, did the play-calling keep favoring passes even when runs were more effective?
+- Across all downs, did the offense start regressing before the injury?
 
 ## Methodology
 
@@ -32,7 +35,8 @@ Efficiency is measured with **Expected Points Added (EPA)** and **success rate**
 6. **Play-calling test:** Early downs are split into 1st down, 2nd & short (≤6 yards), and 2nd & long (7+). In each situation, called runs are compared with called passes and with league-wide averages, and pass share is tracked across segments. A bootstrap (10,000 resamples) measures how confident the 2nd-down run vs. pass gap is.
 7. **Success rate definition:** A play is successful if it gains ≥4 yards on 1st down, or ≥50% of yards-to-go on 2nd down.
 8. **Run gap analysis:** Designed runs to the middle are classed as inside runs and runs to the left or right as outside runs. Plays with no recorded location are excluded.
-9. **Visualization:** Seaborn/Matplotlib weekly chart of Colts EPA against each opponent's rating, grouped bar charts by down and play call, and a run/pass ratio heatmap.
+9. **All-downs check:** The segment comparison and opponent adjustment are repeated on every Colts run and pass play, with a breakdown by down.
+10. **Visualization:** Seaborn/Matplotlib weekly chart of Colts EPA against each opponent's rating, grouped bar charts by down and play call, and a run/pass ratio heatmap.
 
 ## Key Findings
 
@@ -46,7 +50,7 @@ Efficiency is measured with **Expected Points Added (EPA)** and **success rate**
 - **The schedule did get tougher.** Opponents went from middle-of-the-league defenses to defenses ranked around 10th on average.
 - **But the hot start wasn't a soft schedule.** Early opponents were league-average, and the Colts beat what those defenses usually allowed by +0.189 EPA per play, including Denver (#2) and the Chargers (#4).
 - **Schedule explains about a third of the Weeks 9–13 decline.** After adjusting for opponents, the offense still slipped from +0.189 to +0.077 over expected.
-- **The injury explains the collapse.** Weeks 9–13 and 14–18 had equally tough opponents, yet the Colts fell from +0.031 to −0.184 EPA per play once the backups took over.
+- **On early downs, the collapse lines up with the injury.** Weeks 9–13 and 14–18 had equally tough opponents, yet the Colts fell from +0.031 to −0.184 EPA per play once the backups took over.
 
 **What changed in Weeks 9–13**
 - **The biggest slide was in the 2nd-down passing game.** On 1st down, both play types slipped (passes +0.296 → +0.104, designed runs +0.104 → −0.029). On 2nd down they split apart: pass EPA fell from +0.191 to −0.129 while designed runs improved from +0.206 to +0.306.
@@ -54,7 +58,12 @@ Efficiency is measured with **Expected Points Added (EPA)** and **success rate**
 - **On 1st down, passing more was the right call.** Passes still beat runs (+0.104 vs −0.029), matching the league-wide pattern, so the small rise in 1st-down pass share (55.0% → 57.5%) was reasonable.
 - **Confidence:** in a bootstrap of 2nd-down plays, runs came out ahead in 90% of resamples. The 95% range for the gap still includes zero, so this is a strong signal from a small sample, not proof.
 
-**Bottom line:** my schedule hypothesis was partly right. The schedule got harder and that cost the offense some efficiency, but the early success was real, and the collapse lines up with the QB injury, not the schedule. Before the injury, the play-calling kept leaning on the pass on 2nd down even though runs were working better.
+**All downs**
+- **Most of the decline came before the injury.** Across every run and pass, Colts EPA per play fell from +0.241 (Weeks 1–8) to −0.015 (Weeks 9–13) with Jones still starting, then to −0.119 after the injury.
+- **It holds after adjusting for opponents:** +0.241 → +0.013 over expected.
+- **3rd down was the biggest single factor.** 3rd-down EPA went from +0.256 to −0.242 in Weeks 9–13, then back to +0.244 after the injury. Early downs slipped before the injury and collapsed after it; 3rd down collapsed before it.
+
+**Bottom line:** my schedule hypothesis was partly right. The schedule got harder and that cost the offense some efficiency, but the early success was real. Across all downs, the offense was already regressing before the QB injury, and the drop held after adjusting for opponent strength. 3rd down fell apart first, early downs slipped, and the 2nd-down play-calling kept leaning on the pass even though runs were working better. After the injury, the early-down offense collapsed.
 
 ## Tech Stack
 
@@ -74,6 +83,6 @@ jupyter notebook analysis.ipynb
 
 ## Notes and Limitations
 
-Weeks 9–13 is only four games (187 early-down plays) and Weeks 14–18 is five, so single games move segment averages a lot. In Weeks 9–13, 2nd & short has only 26 runs and 16 passes, and there were only 2 designed runs on 2nd & long in Weeks 9–13, so that situation can't be judged. Defensive ratings use early-down EPA only. Jones was reportedly playing through injury in the weeks before Week 14, which could explain part of the pre-injury passing decline, but the data doesn't capture injury status play by play.
+Weeks 9–13 is only four games (187 early-down plays, 49 third-down plays) and Weeks 14–18 is five, so single games move segment averages a lot. In Weeks 9–13, 2nd & short has only 26 runs and 16 passes, and there were only 2 designed runs on 2nd & long in Weeks 9–13, so that situation can't be judged. Defensive ratings use early-down EPA only. Jones was reportedly playing through injury in the weeks before Week 14, which could explain part of the pre-injury passing decline, but the data doesn't capture injury status play by play.
 
 Future extensions: 3rd down conversion analysis, red zone efficiency, pass depth/location splits, and comparing the Leonard and Rivers starts.
